@@ -2,7 +2,7 @@
 #'
 #' @description Provides a summary table of regression in the form of scientific paper
 #'
-#' @param object an R object of glm or lm
+#' @param model an R glm object
 #' @param exp TRUE by default. You need to specify exp = FALSE if your model is has the indentity link function (linear regression, etc).
 #' @param digits Number of digits to print for the main part.
 #' @param pDigits Number of digits to print for the p-values.
@@ -19,9 +19,8 @@
 #' output_table <- overview_tab(dat = toydata, id = ccode, time = year)
 #' @export
 #' @importFrom dplyr "%>%" tableone
-summary_glm <- function(x, exp = T, digits = 2, pDigits = 4, printToggle = T, quote = F,n1 = 2, n2 = 2, ciFun = confint){
-
-  table1 <- tableone::ShowRegTable(model = x, exp = exp, digits = digits, pDigits = pDigits, printToggle = printToggle, quote = quote, ciFun = ciFun) %>%
+summary_glm <- function(model, exp = T, digits = 2, pDigits = 4, printToggle = T, quote = F,n1 = 2, n2 = 2, ciFun = confint){
+  table1 <- tableone::ShowRegTable(model = model, exp = exp, digits = digits, pDigits = pDigits, printToggle = printToggle, quote = quote, ciFun = ciFun) %>%
     as.data.frame()
   table2 <- broom::tidy(x) %>% as.data.frame()
   beta <- table2[["estimate"]] %>% as.numeric() %>% sprintf(paste0("%.", digits, "f"), .)
